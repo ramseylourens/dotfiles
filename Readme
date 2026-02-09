@@ -1,5 +1,12 @@
 # Setup
-ln -s ~/Library/Mobile\ Documents/com~apple~CloudDocs/dotfiles/.zshrc ~/.zshrc
-source ~/.zshrc
 
-setup
+WIP dotfiles
+
+'''bash
+git clone git@github.com:ramseylourens/dotfiles.git ~/.dotfiles
+cd ~/.dotfiles
+setup.sh
+'''
+
+# Todo
+- [ ] Check if GitHub CodeSpaces is supported
