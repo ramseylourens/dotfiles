@@ -6,5 +6,7 @@ cd ~/.dotfiles
 setup.sh
 ```
 
+
 # Todo
 - [ ] Check if GitHub CodeSpaces is supported
+- [ ] Setup of Oh my zsh
