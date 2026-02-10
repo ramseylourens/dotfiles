@@ -8,8 +8,10 @@ setup.sh
 
 
 # Roadmap
-- [ ] OSX
+- OSX Setup
     - [x] Xcode CLI Tools
     - [x] Homebrew Install
-- [ ] Check if GitHub CodeSpaces is supported
-- [ ] Setup of Oh my zsh
+- GitHub CodeSpaces
+    - [ ] Check if GitHub CodeSpaces is supported
+- General
+    - [ ] Setup of Oh my zsh
