@@ -7,6 +7,9 @@ setup.sh
 ```
 
 
-# Todo
+# Roadmap
+- [ ] OSX
+    - [x] Xcode CLI Tools
+    - [x] Homebrew Install
 - [ ] Check if GitHub CodeSpaces is supported
 - [ ] Setup of Oh my zsh
