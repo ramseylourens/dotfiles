@@ -7,7 +7,7 @@ chsh -s /bin/zsh
 if [[ "$(uname)" == "Darwin" ]] && [[ -d "$HOME/Library/Mobile Documents/com~apple~CloudDocs/dotfiles" ]]; then
     
     echo "Detected MACOSX and Icloud drive is active\nCopying dotfiles to home directory" 
-    ln -sf ~/Library/Mobile\ Documents/com~apple~CloudDocs/dotfiles/ ~/dotfiles
+    ln -sfn ~/Library/Mobile\ Documents/com~apple~CloudDocs/dotfiles/ ~/
 
     if ! xcode-select -p &>/dev/null; then
         echo "Installing Xcode Command Line Interface Tools, Agree to the Agreement dialog"
@@ -22,7 +22,7 @@ if [[ "$(uname)" == "Darwin" ]] && [[ -d "$HOME/Library/Mobile Documents/com~app
 # otherwise copy dotfiles from working directory
 else
     echo "Copying dotfiles to home directory"  
-    ln -sf ~/Library/Mobile\ Documents/com~apple~CloudDocs/dotfiles/ ~/dotfiles
+    ln -sfn ~/Library/Mobile\ Documents/com~apple~CloudDocs/dotfiles/ ~/
 fi
 
 echo "Symlinking .zshrc file to home directory" 
