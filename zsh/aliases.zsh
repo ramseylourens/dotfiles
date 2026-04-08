@@ -24,12 +24,32 @@ alias pecl83="/usr/local/opt/php@8.3/bin/pecl"
 alias pecl84="/usr/local/opt/php@8.4/bin/pecl"
 alias pecl85="/usr/local/opt/php@8.5/bin/pecl"
 
+# Nginx
+alias nginxreload="sudo nginx -s reload"
+alias nginxrestart="sudo nginx -s stop && sudo nginx"
+alias cnginx="code /usr/local/etc/nginx"
+alias nginxlist="ll /usr/local/etc/nginx/servers"
+
+# Sites
+alias sites="cd ~/Sites"
+alias sramsey="cd ~/Sites/ramseylourens"
+alias cramsey="code ~/Sites/ramseylourens"
+alias sjournler="cd ~/Sites/journler"
+alias cjournler="code ~/Sites/journler"
+
 # Composer
 alias c="composer"
+alias cdev="c run dev"
+alias cbuild="c run build"
 
 # Laravel
 alias a="php artisan"
+alias sail='sh $([ -f sail ] && echo sail || echo vendor/bin/sail)'
+alias octane="php artisan octane:start --server=roadrunner --watch"
 
 # Zshrc
-alias sourcezsh="source ~/.zshrc"
-alias editzsh="code ~/.zshrc"
+alias szsh="source ~/.zshrc"
+alias czsh="code ~/Library/Mobile Documents/com~apple~CloudDocs/dotfiles/"
+
+# Git
+alias ec="git commit --allow-empty -m 'force redeploy'"

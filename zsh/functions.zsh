@@ -4,12 +4,6 @@ function phpv() {
     php -v
 }
 
-alias nginxreload="sudo nginx -s reload"
-alias nginxrestart="sudo nginx -s stop && sudo nginx"
-alias nginxservers="cd /usr/local/etc/nginx/servers"
-alias nginxlist="ll /usr/local/etc/nginx/servers"
-alias sites="cd ~/Sites"
-
 # nginxcreate text.x  /Users/yourname/Code/laravel/public/
 function nginxcreate() {
     wget https://gist.githubusercontent.com/ramseylourens/e67e8338c59e91828e2c6bc045a74b18/raw/ba4b2fb7ff72a80e1e6a6ef65c5e30b84ef1d50c/nginx-server-template-m1.conf -O /usr/local/etc/nginx/servers/$1.conf
@@ -48,3 +42,18 @@ function nginxcreate() {
 function setup() {
     ln -s ~/Library/Mobile\ Documents/com~apple~CloudDocs/dotfiles/ ~/dotfiles
 }
+
+# Ramseylourens.com autogit push
+# Also pulls the theme from the appropiate repository
+# https://github.com/ramseylourens/ramsey-lourens.git
+
+# Sites
+function pramsey() {
+    (
+
+        cd ~/Sites/ramseylourens.test || return
+        echo "📤 Pushing to all remotes..."
+        git push transip && echo "✅ Done!" || echo "❌ Push failed"
+    )
+}
+
