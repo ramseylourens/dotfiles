@@ -41,3 +41,8 @@ export PATH="$HOME/.local/bin:$HOME/.composer/vendor/bin:/Library/Frameworks/Pyt
 
 source ~/dotfiles/zsh/aliases.zsh
 source ~/dotfiles/zsh/functions.zsh
+# The following lines have been added by Docker Desktop to enable Docker CLI completions.
+fpath=(/Users/ramseylourens/.docker/completions $fpath)
+autoload -Uz compinit
+compinit
+# End of Docker CLI completions
