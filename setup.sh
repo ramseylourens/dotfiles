@@ -18,6 +18,11 @@ if [[ "$(uname)" == "Darwin" ]] && [[ -d "$HOME/Library/Mobile Documents/com~app
         echo "Installing Homebrew"
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     fi
+
+    if [ -f Brewfile ]; then
+        echo "Brewfile exists downloading and installing your configuration"
+        brew bundle
+    fi
     
 # otherwise copy dotfiles from working directory
 else
