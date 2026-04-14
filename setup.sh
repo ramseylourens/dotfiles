@@ -21,7 +21,7 @@ if [[ "$(uname)" == "Darwin" ]] && [[ -d "$HOME/Library/Mobile Documents/com~app
 
     if [ -f Brewfile ]; then
         echo "Brewfile exists downloading and installing your configuration"
-        brew bundle --no-lock --verbose || true
+        brew bundle --verbose || true
 
     fi
     

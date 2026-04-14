@@ -17,7 +17,7 @@ for plugin in "$ZSH"/plugins/**/*.plugin.zsh(N); do
 done
 
 # Something with the src folder for zsh-completions
-fpath=("$ZSH/plugins/zsh-completions/src" $fpath)
+
 
 #### THEME ####
 source "$ZSH/themes/zsh/$ZSH_THEME.zsh-theme"
@@ -39,10 +39,15 @@ export LC_ALL=en_US.UTF-8
 # 
 export PATH="$HOME/.local/bin:$HOME/.composer/vendor/bin:/Library/Frameworks/Python.framework/Versions/3.4:$HOME/.npm-global:$(npm config get prefix)/bin:${PATH}"
 
-source ~/dotfiles/zsh/aliases.zsh
-source ~/dotfiles/zsh/functions.zsh
-# The following lines have been added by Docker Desktop to enable Docker CLI completions.
+
 fpath=(/Users/ramseylourens/.docker/completions $fpath)
+fpath=("$ZSH/plugins/zsh-completions/src" $fpath)
 autoload -Uz compinit
-compinit
-# End of Docker CLI completions
+if [ $(date +'%j') != $(stat -f '%Sm' -t '%j' ~/.zcompdump 2>/dev/null) ]; then
+  compinit
+else
+  compinit -C  # skip security check, use cache
+fi
+
+zsh-defer source "$ZSH/zsh/aliases.zsh"
+zsh-defer source "$ZSH/zsh/functions.zsh"
