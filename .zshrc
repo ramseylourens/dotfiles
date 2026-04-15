@@ -2,6 +2,11 @@ export ZSH="$HOME/dotfiles"
 
 ZSH_THEME="robbyrussell"
 
+#### Environment Secrets ####
+if [ -f ~/.env ]; then
+  source ~/.env
+fi
+
 #### HELPERS ####
 # Source all helper scripts under $ZSH_CONFIGS/helper
 for helper in "$ZSH"/helpers/**/*.zsh(N); do
@@ -51,3 +56,4 @@ fi
 
 zsh-defer source "$ZSH/zsh/aliases.zsh"
 zsh-defer source "$ZSH/zsh/functions.zsh"
+zsh-defer source "$ZSH/zsh/dotfiles.zsh"
