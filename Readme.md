@@ -17,7 +17,7 @@ Slow and steady
     - [x] Xcode CLI Tools
     - [x] Homebrew Install
 
-$Todo*
+# Todo
 - Dotfiles function
   A way for managing your dotfiles right within your terminal
     - [ ] Sync
