@@ -57,3 +57,6 @@ fi
 zsh-defer source "$ZSH/zsh/aliases.zsh"
 zsh-defer source "$ZSH/zsh/functions.zsh"
 zsh-defer source "$ZSH/zsh/dotfiles.zsh"
+
+# Vite+ bin (https://viteplus.dev)
+. "$HOME/.vite-plus/env"

@@ -22,6 +22,6 @@ Slow and steady
   A way for managing your dotfiles right within your terminal
     - [ ] Sync
         - [ ] Brewfile
-        - [ ] Composer setup
-        - [ ] npm setup?
+        - [x] Composer
+        - [x] npm
         - [ ] ...
