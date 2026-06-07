@@ -1,0 +1,13 @@
+2026-05-21T14:00:57.6NZ mysqld_safe Logging to '/usr/local/var/mysql/Ramseys-MacBook-Pro.local.err'.
+2026-05-21T14:00:58.6NZ mysqld_safe Starting mysqld daemon with databases from /usr/local/var/mysql
+2026-05-21T14:00:59.358856Z 0 [System] [MY-015015] [Server] MySQL Server - start.
+2026-05-21T14:00:59.619609Z 0 [System] [MY-010116] [Server] /usr/local/opt/mysql/bin/mysqld (mysqld 9.6.0) starting as process 40558
+2026-05-21T14:00:59.619623Z 0 [System] [MY-015590] [Server] MySQL Server has access to 8 logical CPUs.
+2026-05-21T14:00:59.619638Z 0 [System] [MY-015590] [Server] MySQL Server has access to 17179869184 bytes of physical memory.
+2026-05-21T14:00:59.623309Z 0 [Warning] [MY-010159] [Server] Setting lower_case_table_names=2 because file system for /usr/local/var/mysql/ is case insensitive
+2026-05-21T14:00:59.635239Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
+2026-05-21T14:00:59.779602Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
+2026-05-21T14:01:00.066195Z 0 [Warning] [MY-010068] [Server] CA certificate ca.pem is self signed.
+2026-05-21T14:01:00.066253Z 0 [System] [MY-013602] [Server] Channel mysql_main configured to support TLS. Encrypted connections are now supported for this channel.
+2026-05-21T14:01:00.087180Z 0 [System] [MY-011323] [Server] X Plugin ready for connections. Bind-address: '::' port: 33060, socket: /tmp/mysqlx.sock
+2026-05-21T14:01:00.087204Z 0 [System] [MY-010931] [Server] /usr/local/opt/mysql/bin/mysqld: ready for connections. Version: '9.6.0'  socket: '/tmp/mysql.sock'  port: 3306  Homebrew.

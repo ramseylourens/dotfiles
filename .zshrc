@@ -42,8 +42,10 @@ export ANDROID_HOME=~/Library/Android/sdk
 export LC_ALL=en_US.UTF-8
 
 # 
-export PATH="$HOME/.local/bin:$HOME/.composer/vendor/bin:/Library/Frameworks/Python.framework/Versions/3.4:$HOME/.npm-global:$(npm config get prefix)/bin:${PATH}"
+export PATH="$HOME/.local/bin:$HOME/.composer/vendor/bin:$HOME/.config/composer/vendor/bin:/Library/Frameworks/Python.framework/Versions/3.4:$HOME/.npm-global:$(npm config get prefix)/bin:${PATH}"
 
+# VSCode Shell Command
+export PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin:$PATH"
 
 fpath=(/Users/ramseylourens/.docker/completions $fpath)
 fpath=("$ZSH/plugins/zsh-completions/src" $fpath)

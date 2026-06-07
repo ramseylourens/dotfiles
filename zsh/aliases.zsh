@@ -53,3 +53,9 @@ alias czsh="code ~/Library/Mobile Documents/com~apple~CloudDocs/dotfiles/"
 
 # Git
 alias ec="git commit --allow-empty -m 'force redeploy'"
+
+# Mongodb
+alias mongodbservice="launchctl bootstrap gui/501 ~/Library/LaunchAgents/homebrew.mxcl.mongodb-community.plist"
+
+# SwimTechNL
+alias swimtechssh="ssh dotramses@37.97.195.44"

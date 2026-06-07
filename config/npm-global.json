@@ -1,12 +1,16 @@
 {
   "name": "lib",
   "dependencies": {
+    "@nestjs/cli": {
+      "version": "11.0.21",
+      "overridden": false
+    },
     "corepack": {
-      "version": "0.34.7",
+      "version": "0.35.0",
       "overridden": false
     },
     "npm": {
-      "version": "11.12.1",
+      "version": "11.15.0",
       "overridden": false
     }
   }
