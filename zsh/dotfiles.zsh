@@ -31,6 +31,20 @@ function dotfiles() {
             composer global install
 
         )
+    elif [[ "$1" == "upgrade" ]]; then
+        echo "Upgrading global packages"
+        (
+    
+            echo "Upgrading homebrew packages"
+            brew upgrade
+
+            echo "Upgrading composer global packages"
+            composer global upgrade
+
+            echo "Upgrading npm global packages"
+            npm update -g
+
+        )  
     else
         echo "List of commands"
     fi
