@@ -21,13 +21,12 @@ for plugin in "$ZSH"/plugins/**/*.plugin.zsh(N); do
   zsh-defer source "$plugin"
 done
 
-# Something with the src folder for zsh-completions
-
 
 #### THEME ####
 source "$ZSH/themes/zsh/$ZSH_THEME.zsh-theme"
 
 # Java Kotlin
+export JAVA_HOME="/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home"
 export PATH="$JAVA_HOME/bin:$PATH"
 
 # Ruby
@@ -37,6 +36,8 @@ export CPPFLAGS="-I/opt/homebrew/opt/ruby/include"
 
 # Android
 export ANDROID_HOME=~/Library/Android/sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/platform-tools
 
 # Cocao Pods
 export LC_ALL=en_US.UTF-8
@@ -62,3 +63,9 @@ zsh-defer source "$ZSH/zsh/dotfiles.zsh"
 
 # Vite+ bin (https://viteplus.dev)
 . "$HOME/.vite-plus/env"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+fpath=(~/.docker/completions $fpath)
+autoload -Uz compinit && compinit

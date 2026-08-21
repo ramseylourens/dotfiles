@@ -58,4 +58,4 @@ alias ec="git commit --allow-empty -m 'force redeploy'"
 alias mongodbservice="launchctl bootstrap gui/501 ~/Library/LaunchAgents/homebrew.mxcl.mongodb-community.plist"
 
 # SwimTechNL
-alias swimtechssh="ssh dotramses@37.97.195.44"
+alias transipssh="ssh dotramses@141.138.141.7"
