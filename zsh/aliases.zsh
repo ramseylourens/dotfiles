@@ -31,11 +31,14 @@ alias cnginx="code /usr/local/etc/nginx"
 alias nginxlist="ll /usr/local/etc/nginx/servers"
 
 # Sites
-alias sites="cd ~/Sites"
+alias sites="cd ~/Sites && ls -1"
 alias sramsey="cd ~/Sites/ramseylourens"
 alias cramsey="code ~/Sites/ramseylourens"
 alias sjournler="cd ~/Sites/journler"
 alias cjournler="code ~/Sites/journler"
+
+# Code
+alias codes="cd ~/Code && ls -1"
 
 # Composer
 alias c="composer"

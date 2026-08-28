@@ -51,6 +51,9 @@ function dotfiles() {
             cd "$ZSH"
             code .
         )
+    elif [[ "$1" == "reload" ]]; then
+        echo "Reloading Terminal Environment"
+        source "$HOME/.zshrc"
     else
         echo "List of commands"
     fi
