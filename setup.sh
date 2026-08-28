@@ -2,6 +2,23 @@
 echo -e "\033[33mChanging the default shell to /bin/zsh\033[0m"
 chsh -s /bin/zsh
 
+if [[ "$(uname)" == "Linux" ]]; then
+    echo -e "\033[33mDetected Linux VPS, setting up minimal dotfiles environment\033[0m"
+
+    sudo apt-get update
+    sudo apt-get install -y git curl zsh ca-certificates
+
+    # If the repo is already cloned in the home folder
+    [ -d "$HOME/dotfiles" ] || git clone https://github.com/ramseylourens/dotfiles.git "$HOME/dotfiles"
+
+    ln -sf "$HOME/dotfiles/.zshrc" "$HOME/.zshrc"
+    ln -sf "$HOME/dotfiles/.zshenv" "$HOME/.zshenv"
+
+    chsh -s /bin/zsh || true
+    source "$HOME/.zshrc"
+    exit 0
+fi
+
 # Check if running on osx and Icloud is enabled then copy dotfiles from icloud account
 if [[ "$(uname)" == "Darwin" ]] && [[ -d "$HOME/Library/Mobile Documents/com~apple~CloudDocs/dotfiles" ]]; then
     

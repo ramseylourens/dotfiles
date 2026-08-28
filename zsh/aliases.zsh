@@ -38,6 +38,7 @@ alias sjournler="cd ~/Sites/journler"
 alias cjournler="code ~/Sites/journler"
 
 # Code
+alias code="code ."
 alias codes="cd ~/Code && ls -1"
 
 # Composer
@@ -61,4 +62,4 @@ alias ec="git commit --allow-empty -m 'force redeploy'"
 alias mongodbservice="launchctl bootstrap gui/501 ~/Library/LaunchAgents/homebrew.mxcl.mongodb-community.plist"
 
 # SwimTechNL
-alias transipssh="ssh dotramses@141.138.141.7"
+alias transipssh="ssh ramsey@149.210.177.254"
