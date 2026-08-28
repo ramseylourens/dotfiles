@@ -45,10 +45,11 @@ function dotfiles() {
             npm update -g
 
         )  
-    elif [[ "$1" == "code"]]; then
+    elif [[ "$1" == "code" ]]; then
         echo "Opening in dotfiles in VsCode"
         (
-            cd ~/Dotfiles && code .
+            cd "$ZSH"
+            code .
         )
     else
         echo "List of commands"
