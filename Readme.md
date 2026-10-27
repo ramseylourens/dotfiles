@@ -25,3 +25,4 @@ Slow and steady
         - [x] Composer
         - [x] npm
         - [ ] ...
+xcode does not work
