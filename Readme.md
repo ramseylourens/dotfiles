@@ -16,8 +16,13 @@ Slow and steady
 - OSX Setup
     - [x] Xcode CLI Tools
     - [x] Homebrew Install
+ 
+*27 Oktober 2026*
+- OSX Setup
+    - [x] Brewfile targetted
+    - [x] First run xcode command line tools install should pause the installer
 
 # Todo
 - Dotfiles function
   A way for managing your dotfiles right within your terminal
-  - [ ] First run xcode command line tools install should pause the installer
+  - [ ] ..
