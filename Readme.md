@@ -20,9 +20,4 @@ Slow and steady
 # Todo
 - Dotfiles function
   A way for managing your dotfiles right within your terminal
-    - [ ] Sync
-        - [ ] Brewfile
-        - [x] Composer
-        - [x] npm
-        - [ ] ...
-xcode does not work
+  - [ ] First run xcode command line tools install should pause the installer
