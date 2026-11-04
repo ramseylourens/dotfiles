@@ -20,10 +20,12 @@ done
 #### THEME ####
 source "$ZSH/themes/zsh/$ZSH_THEME.zsh-theme"
 
-# Ruby
-export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
-export LDFLAGS="-L/opt/homebrew/opt/ruby/lib"
-export CPPFLAGS="-I/opt/homebrew/opt/ruby/include"
+# Ruby (Homebrew keeps it keg-only; MacPorts puts it on PATH via /opt/local/bin)
+if [[ "$DOTFILES_PM" == "brew" && -d "$PKG_PREFIX/opt/ruby" ]]; then
+  export PATH="$PKG_PREFIX/opt/ruby/bin:$PATH"
+  export LDFLAGS="-L$PKG_PREFIX/opt/ruby/lib"
+  export CPPFLAGS="-I$PKG_PREFIX/opt/ruby/include"
+fi
 
 # Android
 export ANDROID_HOME=~/Library/Android/sdk

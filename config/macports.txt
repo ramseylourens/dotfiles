@@ -1,0 +1,61 @@
+# MacPorts packages for the Intel MacBook Pro (OpenCore Legacy Patcher), one port per line.
+# Port variants go after the name, e.g. "ffmpeg +nonfree". Installed by `dotfiles install` and setup.sh.
+# Not available in MacPorts, installed separately by setup.sh: composer, cocoapods, heroku, mongosh,
+# corepack, brew-php-switcher (use `port select --set php php84` instead), and all casks / mas apps.
+
+# Toolchain
+cmake
+pkgconfig
+openssl3
+wget
+jq
+mkcert
+gradle
+kotlin
+mas
+
+# Languages
+ruby33
+python314
+py314-pip
+py314-setuptools
+py314-numpy
+py314-pyqt5
+py313-awscli2
+nodejs22
+npm10
+nvm
+
+# PHP
+php84
+php84-curl
+php84-gd
+php84-gmp
+php84-intl
+php84-mbstring
+php84-mysql
+php84-openssl
+php84-postgresql
+php84-sockets
+php84-sqlite
+php84-xdebug
+php84-zip
+php84-fpm
+roadrunner
+
+# Services
+nginx
+dnsmasq
+mailpit
+mysql8
+mysql8-server
+postgresql14
+postgresql14-server
+mongodb
+
+# Tools
+docker
+watchman
+libusb
+libbtbb
+ubertooth

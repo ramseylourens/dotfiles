@@ -1,6 +1,120 @@
 #!/usr/bin/env zsh
+# Usage: ./setup.sh [--dry-run]
+# DOTFILES_PM=brew|port forces a package manager, otherwise it is detected per machine.
+
+DRY_RUN=0
+[[ "$1" == "--dry-run" ]] && DRY_RUN=1
+
+# Runs a command, or only prints it with --dry-run
+run() {
+    if (( DRY_RUN )); then
+        echo "[dry-run] $*"
+    else
+        "$@"
+    fi
+}
+
+source "${0:A:h}/helpers/platform.zsh"
+echo -e "\033[33mPackage manager: $DOTFILES_PM (prefix $PKG_PREFIX)\033[0m"
+
+# Prints the MacPorts installer url for the running macOS version
+macports_pkg_url() {
+    local version="${MACPORTS_VERSION:-2.12.7}"
+    local macos="$(sw_vers -productVersion)" name
+    case "${macos%%.*}" in
+        10) [[ "$macos" == 10.15* ]] && name="10.15-Catalina" ;;
+        11) name="11-BigSur" ;;
+        12) name="12-Monterey" ;;
+        13) name="13-Ventura" ;;
+        14) name="14-Sonoma" ;;
+        15) name="15-Sequoia" ;;
+        26) name="26-Tahoe" ;;
+        27) name="27-GoldenGate" ;;
+    esac
+
+    if [[ -z "$name" ]]; then
+        echo "No MacPorts installer known for macOS $macos" >&2
+        return 1
+    fi
+    echo "https://github.com/macports/macports-base/releases/download/v${version}/MacPorts-${version}-${name}.pkg"
+}
+
+install_with_brew() {
+    if ! command -v brew &>/dev/null; then
+    	echo -e "\033[33mInstalling Homebrew\033[0m"
+    	# This URL fetches the true, official architecture-agnostic installer
+    	run ./brew.sh
+
+    	run brew install npm
+    	run brew install --cask google-chrome
+    	run brew install --cask iterm2
+    fi
+
+    if [ -f ~/dotfiles/config/Brewfile ]; then
+        echo -e "\033[33mBrewfile exists downloading and installing your configuration\033[0m"
+        run brew bundle --file=~/dotfiles/config/Brewfile --verbose || true
+
+        # Symlink Mongodb conf
+        run ln -sf ~/dotfiles/config/mongod.conf "$PKG_PREFIX/etc/mongod.conf"
+
+        # Symlink MySQL conf
+        run ln -sf ~/dotfiles/config/my.cnf ~/.my.cnf
+
+        # Setup MySQL
+        run mysql_secure_installation
+
+        # Setup Mkcert?
+        run mkcert -install
+    fi
+}
+
+install_with_macports() {
+    if [[ ! -x /opt/local/bin/port ]]; then
+        echo -e "\033[33mInstalling MacPorts\033[0m"
+        local url pkg="${TMPDIR:-/tmp}/macports.pkg"
+        url="$(macports_pkg_url)" || return 1
+        run curl -fL "$url" -o "$pkg"
+        run sudo installer -pkg "$pkg" -target /
+    fi
+    export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
+
+    echo -e "\033[33mUpdating MacPorts\033[0m"
+    run sudo port selfupdate
+
+    if [ -f ~/dotfiles/config/macports.txt ]; then
+        echo -e "\033[33mInstalling ports from macports.txt\033[0m"
+        local line failed=()
+        while IFS= read -r line; do
+            [[ -z "$line" || "$line" == \#* ]] && continue
+            run sudo port install ${=line} || failed+=("$line")
+        done < ~/dotfiles/config/macports.txt
+        (( ${#failed} )) && echo -e "\033[31mFailed ports: ${failed[*]}\033[0m"
+
+        run sudo port select --set php php84
+        run sudo port select --set ruby ruby33
+
+        # Not available as ports
+        if ! command -v composer &>/dev/null; then
+            run mkdir -p ~/.local/bin
+            run zsh -c 'curl -sS https://getcomposer.org/installer | php -- --install-dir="$HOME/.local/bin" --filename=composer'
+        fi
+        run sudo gem install cocoapods
+
+        if command -v code &>/dev/null && [ -f ~/dotfiles/config/vscode-extensions.txt ]; then
+            run zsh -c 'xargs -n 1 code --install-extension < ~/dotfiles/config/vscode-extensions.txt'
+        fi
+        # Symlink MySQL conf
+        run ln -sf ~/dotfiles/config/my.cnf ~/.my.cnf
+
+        run mkcert -install
+        echo -e "\033[33mMongoDB, MySQL and PostgreSQL servers need a one-time init, see the Readme\033[0m"
+    fi
+
+    echo -e "\033[33mCasks and Mac App Store apps are not in MacPorts, install them manually (see Readme)\033[0m"
+}
+
 echo -e "\033[33mChanging the default shell to /bin/zsh\033[0m"
-chsh -s /bin/zsh
+run chsh -s /bin/zsh
 
 if [[ "$(uname)" == "Linux" ]]; then
     echo -e "\033[33mDetected Linux VPS, setting up minimal dotfiles environment\033[0m"
@@ -23,58 +137,47 @@ fi
 if [[ "$(uname)" == "Darwin" ]] && [[ -d "$HOME/Library/Mobile Documents/com~apple~CloudDocs/dotfiles" ]]; then
     
     echo -e "\033[33mDetected MACOSX and Icloud drive is active\nCopying dotfiles to home directory\033[0m" 
-    ln -sfn ~/Library/Mobile\ Documents/com~apple~CloudDocs/dotfiles/ ~/
+    run ln -sfn ~/Library/Mobile\ Documents/com~apple~CloudDocs/dotfiles/ ~/
 
     if ! xcode-select -p &>/dev/null; then
     	echo -e "\033[33mInstalling Xcode Command Line Interface Tools...\033[0m"
-    	xcode-select --install
+    	run xcode-select --install
     
     	# Pause and wait for user input
-    	echo -e "\033[36m👉 Complete the GUI installation popup, then press [ENTER] here to continue your dotfiles setup...\033[0m"
-    	read -r
+    	if (( ! DRY_RUN )); then
+    	    echo -e "\033[36m👉 Complete the GUI installation popup, then press [ENTER] here to continue your dotfiles setup...\033[0m"
+    	    read -r
+    	fi
     fi
 
-    if ! command -v brew &>/dev/null; then
-    	echo -e "\033[33mInstalling Homebrew\033[0m"
-    	# This URL fetches the true, official architecture-agnostic installer
-    	./brew.sh
-
-    	brew install npm
-    	brew install --cask google-chrome
-    	brew install --cask iterm2
+    if [[ "$DOTFILES_PM" == "port" ]]; then
+        install_with_macports
+    else
+        install_with_brew
     fi
 
-    if [ -f ~/dotfiles/config/Brewfile ]; then
-        echo -e "\033[33mBrewfile exists downloading and installing your configuration\033[0m"
-        brew bundle --file=~/dotfiles/config/Brewfile --verbose || true
-
-        # Symlink Mongodb conf
-        ln -sf ~/dotfiles/config/mongod.conf /usr/local/etc/mongod.conf
-
-        # Symlink MySQL conf
-        ln -sf ~/dotfiles/config/my.cnf ~/.my.cnf
-
-        # Setup MySQL
-        mysql_secure_installation
-
-        # Setup Mkcert?
-        mkcert -install
-
-
+    if (( DRY_RUN )); then
+        echo -e "\033[33mDry run finished, stopping before the composer, npm and repository steps\033[0m"
+        exit 0
     fi
 
     if [ -f "$HOME/dotfiles/config/composer.json" ]; then
         cp "$HOME/dotfiles/config/composer.json" "$HOME/.composer/composer.json"
         composer global install
-        valet install
 
+        ln -sf ~/dotfiles/nginx "$PKG_PREFIX/etc/nginx"
 
-        ln -sf ~/dotfiles/nginx /usr/local/etc/nginx
-        ln -sf ~/dotfiles/valet ~/.config/valet
-        
-        valet secure swimtech && valet secure waterfiets && valet secure api.swimtech
+        if [[ "$DOTFILES_PM" == "brew" ]]; then
+            valet install
 
-        valet restart
+            ln -sf ~/dotfiles/valet ~/.config/valet
+
+            valet secure swimtech && valet secure waterfiets && valet secure api.swimtech
+
+            valet restart
+        else
+            echo "Valet needs Homebrew, skipping. Sites are served by nginx from $PKG_PREFIX/etc/nginx"
+        fi
     else
         echo "composer.json not found in ~/dotfiles/config"
     fi
