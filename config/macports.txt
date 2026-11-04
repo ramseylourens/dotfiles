@@ -1,61 +1,36 @@
-# MacPorts packages for the Intel MacBook Pro (OpenCore Legacy Patcher), one port per line.
-# Port variants go after the name, e.g. "ffmpeg +nonfree". Installed by `dotfiles install` and setup.sh.
-# Not available in MacPorts, installed separately by setup.sh: composer, cocoapods, heroku, mongosh,
-# corepack, brew-php-switcher (use `port select --set php php84` instead), and all casks / mas apps.
-
-# Toolchain
 cmake
-pkgconfig
-openssl3
-wget
-jq
-mkcert
+dnsmasq +dhcp +ipv6 +tftp
 gradle
+ImageMagick +openexr +x11
+jq
 kotlin
-mas
-
-# Languages
-ruby33
-python314
-py314-pip
-py314-setuptools
-py314-numpy
-py314-pyqt5
-py313-awscli2
+mailpit
+mkcert
+nginx +fancyindex +flv +http2 +mp4 +secure_link +ssl +stream
 nodejs22
 npm10
 nvm
-
-# PHP
-php84
+openssl3
+php84 +libedit
 php84-curl
+php84-fpm
 php84-gd
 php84-gmp
 php84-intl
 php84-mbstring
-php84-mysql
+php84-mysql +mysqlnd
 php84-openssl
-php84-postgresql
+php84-postgresql +postgresql18
 php84-sockets
 php84-sqlite
 php84-xdebug
 php84-zip
-php84-fpm
-roadrunner
-
-# Services
-nginx
-dnsmasq
-mailpit
-mysql8
-mysql8-server
-postgresql14
-postgresql14-server
-mongodb
-
-# Tools
-docker
-watchman
-libusb
-libbtbb
-ubertooth
+pkgconfig
+py313-awscli2
+py314-numpy +accelerate +gfortran
+py314-pip
+py314-pyqt5
+py314-setuptools
+python314 +lto +optimizations
+ruby33 +yjit
+wget +gnutls
