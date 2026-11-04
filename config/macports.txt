@@ -1,6 +1,7 @@
 cmake
 dnsmasq +dhcp +ipv6 +tftp
 gradle
+httrack +ipv6
 ImageMagick +openexr +x11
 jq
 kotlin
