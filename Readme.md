@@ -1,5 +1,7 @@
 # My dotfiles Setup
 
+![Header](./assets/Header.png)
+
 Feel free to use or adapt for personal use.
 
 ```bash
