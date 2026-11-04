@@ -2,11 +2,6 @@ export ZSH="$HOME/dotfiles"
 
 ZSH_THEME="robbyrussell"
 
-#### Environment Secrets ####
-if [ -f ~/.env ]; then
-  source ~/.env
-fi
-
 #### HELPERS ####
 # Source all helper scripts under $ZSH_CONFIGS/helper
 for helper in "$ZSH"/helpers/**/*.zsh(N); do
@@ -25,10 +20,6 @@ done
 #### THEME ####
 source "$ZSH/themes/zsh/$ZSH_THEME.zsh-theme"
 
-# Java Kotlin
-export JAVA_HOME="/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home"
-export PATH="$JAVA_HOME/bin:$PATH"
-
 # Ruby
 export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
 export LDFLAGS="-L/opt/homebrew/opt/ruby/lib"
@@ -43,7 +34,7 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 export LC_ALL=en_US.UTF-8
 
 # 
-export PATH="$HOME/.local/bin:$HOME/.composer/vendor/bin:$HOME/.config/composer/vendor/bin:/Library/Frameworks/Python.framework/Versions/3.4:$HOME/.npm-global:$(npm config get prefix)/bin:${PATH}"
+export PATH="$HOME/.local/bin:$HOME/.composer/vendor/bin:$HOME/.config/composer/vendor/bin:/Library/Frameworks/Python.framework/Versions/3.4:$HOME/.npm-global:${PATH}"
 
 # VSCode Shell Command
 export PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin:$PATH"
@@ -61,11 +52,15 @@ zsh-defer source "$ZSH/zsh/aliases.zsh"
 zsh-defer source "$ZSH/zsh/functions.zsh"
 zsh-defer source "$ZSH/zsh/dotfiles.zsh"
 
-# Vite+ bin (https://viteplus.dev)
-. "$HOME/.vite-plus/env"
-
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 fpath=(~/.docker/completions $fpath)
 autoload -Uz compinit && compinit
+eval "$(/Users/ramseylourens/.local/bin/mise activate zsh)"
+
+# Java Kotlin (resolved via mise)
+if _java_home="$(mise where java 2>/dev/null)" && [ -n "$_java_home" ]; then
+  export JAVA_HOME="$_java_home"
+fi
+unset _java_home

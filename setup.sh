@@ -26,23 +26,27 @@ if [[ "$(uname)" == "Darwin" ]] && [[ -d "$HOME/Library/Mobile Documents/com~app
     ln -sfn ~/Library/Mobile\ Documents/com~apple~CloudDocs/dotfiles/ ~/
 
     if ! xcode-select -p &>/dev/null; then
-        echo -e "\033[33mInstalling Xcode Command Line Interface Tools, Agree to the Agreement dialog\033[0m"
-        xcode-select --install
+    	echo -e "\033[33mInstalling Xcode Command Line Interface Tools...\033[0m"
+    	xcode-select --install
+    
+    	# Pause and wait for user input
+    	echo -e "\033[36m👉 Complete the GUI installation popup, then press [ENTER] here to continue your dotfiles setup...\033[0m"
+    	read -r
     fi
 
     if ! command -v brew &>/dev/null; then
-        echo -e "\033[33mInstalling Homebrew\033[0m"
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    	echo -e "\033[33mInstalling Homebrew\033[0m"
+    	# This URL fetches the true, official architecture-agnostic installer
+    	./brew.sh
 
-        # Install these before brew bundle install because thats why
-        brew install npm
-        brew install --cask google-chrome
-        brew install --cask iterm2
+    	brew install npm
+    	brew install --cask google-chrome
+    	brew install --cask iterm2
     fi
 
     if [ -f ~/dotfiles/config/Brewfile ]; then
         echo -e "\033[33mBrewfile exists downloading and installing your configuration\033[0m"
-        brew bundle --verbose || true
+        brew bundle --file=~/dotfiles/config/Brewfile --verbose || true
 
         # Symlink Mongodb conf
         ln -sf ~/dotfiles/config/mongod.conf /usr/local/etc/mongod.conf
