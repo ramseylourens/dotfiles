@@ -1,0 +1,21 @@
+{
+  "name": "dotfiles-sync-linux",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Linux desktop shell for Dotfiles Sync",
+  "author": "Ramsey Lourens",
+  "homepage": "https://github.com/ramseylourens/dotfiles",
+  "desktopName": "DotfilesSync.desktop",
+  "main": "main.js",
+  "scripts": {
+    "sync": "node sync.js",
+    "start": "electron .",
+    "smoke": "SMOKE_TEST=1 electron . --no-sandbox",
+    "build": "yarn sync && electron-builder --linux",
+    "build:windows": "yarn sync && electron-builder --win portable"
+  },
+  "devDependencies": {
+    "electron": "^45.0.0",
+    "electron-builder": "^26.18.0"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "extends": "@react-native/typescript-config",
+  "compilerOptions": {
+    "strict": true,
+    "lib": ["esnext", "dom"],
+    "paths": {
+      "src/*": ["./src/*"]
+    },
+    "types": ["jest", "webpack-env"]
+  },
+  "include": ["src", "index.js", "web/index.web.tsx"],
+  "exclude": ["node_modules", "ios/Pods", "macos/Pods", "windows"]
+}

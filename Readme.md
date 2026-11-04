@@ -9,11 +9,18 @@ cd ~/Library/Mobile\ Documents/com~apple~CloudDocs/dotfiles/
 ```
 
 `./setup.sh --dry-run` prints what would be installed without changing anything.
-`./setup.sh --install-sync-app` builds and installs only the macOS Dotfiles Sync app.
+`./setup.sh --install-sync-app` builds and installs the desktop app for macOS or Linux. On Windows, run `.\setup.ps1` in PowerShell from the repository root.
 
-On macOS, `setup.sh` also builds and installs the Dotfiles Sync app in `~/Applications`. On first launch, the app registers an hourly background helper; approve it under **System Settings → General → Login Items → Allow in the Background** if macOS asks. The helper runs `dotfiles sync`, commits only managed package inventory files, and pushes to `origin main`. It skips empty syncs and refuses to push from a non-`main` branch, over local edits to managed files, or when `main` has diverged. Logs are written to `~/Library/Logs/DotfilesSync/sync.log`.
+The desktop app source is in [apps/DotfilesSync/desktop](./apps/DotfilesSync/desktop). Mobile iOS and Android targets are not part of this desktop build. macOS uses the React Native macOS target; Linux and Windows use the Electron shell around the shared web UI. The app's Settings screen lets you switch between a regular Dock/taskbar window and a menu-bar/system-tray mode. The tray mode keeps the app running when its window is closed.
 
-Open `apps/DotfilesSync/DotfilesSync.xcodeproj` in Xcode to develop the macOS app and its helper.
+Build prerequisites:
+- macOS: Node.js 22+, Yarn 1.22+, Xcode, and CocoaPods.
+- Linux: Node.js 22+, Yarn 1.22+, and the native libraries required by Electron.
+- Windows: Node.js 22+, Yarn 1.22+, and PowerShell; run the build on Windows to produce the portable app and Start Menu shortcut.
+
+Hourly background sync and its Git commit/push policy are not yet connected to this React Native desktop app.
+
+Open `apps/DotfilesSync/desktop/macos/ReactNativeStarter.xcodeproj` in Xcode to develop the macOS app.
 
 ## Supported machines
 

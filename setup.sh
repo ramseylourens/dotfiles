@@ -18,6 +18,11 @@ run() {
     fi
 }
 
+if [[ "$(uname -s)" == MINGW* || "$(uname -s)" == MSYS* || "$(uname -s)" == CYGWIN* || "$(uname -s)" == "Windows_NT" ]]; then
+    echo "This script requires macOS or Linux. Run .\\setup.ps1 for Windows." >&2
+    exit 1
+fi
+
 source "${0:A:h}/helpers/platform.zsh"
 echo -e "\033[33mPackage manager: $DOTFILES_PM (prefix $PKG_PREFIX)\033[0m"
 
@@ -118,27 +123,76 @@ install_with_macports() {
 }
 
 install_dotfiles_sync_app() {
-    local project="${0:A:h}/apps/DotfilesSync/DotfilesSync.xcodeproj"
-    local derived="$TMPDIR/dotfiles-sync-derived"
-    local app="$derived/Build/Products/Release/DotfilesSync.app"
+    local desktop="${0:A:h}/apps/DotfilesSync/desktop"
+    local os="$(uname -s)"
 
-    if (( DRY_RUN )); then
-        echo "[dry-run] xcodebuild -project \"$project\" -scheme DotfilesSync -configuration Release -derivedDataPath \"$derived\" CODE_SIGN_IDENTITY=- clean build"
-        echo "[dry-run] ditto \"$app\" \"$HOME/Applications/DotfilesSync.app\""
-        echo "[dry-run] open -a \"$HOME/Applications/DotfilesSync.app\""
-        return
-    fi
+    case "$os" in
+        Darwin)
+            local project="$desktop/macos/ReactNativeStarter.xcodeproj"
+            local derived="${TMPDIR:-$HOME/.cache}/dotfiles-sync-derived"
+            local app="$derived/Build/Products/Release/DotfilesSync.app"
 
-    xcodebuild -project "$project" \
-        -scheme DotfilesSync \
-        -configuration Release \
-        -derivedDataPath "$derived" \
-        CODE_SIGN_IDENTITY=- \
-        clean build || return 1
+            if (( DRY_RUN )); then
+                echo "[dry-run] yarn --cwd \"$desktop\" install --frozen-lockfile"
+                echo "[dry-run] yarn --cwd \"$desktop\" macos:pod:install"
+                echo "[dry-run] xcodebuild -project \"$project\" -scheme ReactNativeStarter-macOS -configuration Release -derivedDataPath \"$derived\" CODE_SIGN_IDENTITY=- clean build"
+                echo "[dry-run] ditto \"$app\" \"$HOME/Applications/DotfilesSync.app\""
+                echo "[dry-run] open -a \"$HOME/Applications/DotfilesSync.app\""
+                return
+            fi
 
-    mkdir -p "$HOME/Applications"
-    ditto "$app" "$HOME/Applications/DotfilesSync.app" || return 1
-    open -a "$HOME/Applications/DotfilesSync.app"
+            command -v yarn >/dev/null || { echo "Yarn is required to build Dotfiles Sync." >&2; return 1; }
+            command -v xcodebuild >/dev/null || { echo "Xcode is required to build Dotfiles Sync." >&2; return 1; }
+            yarn --cwd "$desktop" install --frozen-lockfile || return 1
+            yarn --cwd "$desktop" macos:pod:install || return 1
+            xcodebuild -project "$project" \
+                -scheme ReactNativeStarter-macOS \
+                -configuration Release \
+                -derivedDataPath "$derived" \
+                CODE_SIGN_IDENTITY=- \
+                clean build || return 1
+
+            mkdir -p "$HOME/Applications"
+            ditto "$app" "$HOME/Applications/DotfilesSync.app" || return 1
+            open -a "$HOME/Applications/DotfilesSync.app"
+            ;;
+        Linux)
+            local build_dir="$desktop/linux/dist"
+            local app="$HOME/Applications/DotfilesSync.AppImage"
+            local desktop_entry="$HOME/.local/share/applications/dotfiles-sync.desktop"
+
+            if (( DRY_RUN )); then
+                echo "[dry-run] yarn --cwd \"$desktop\" install --frozen-lockfile"
+                echo "[dry-run] yarn --cwd \"$desktop\" linux:install"
+                echo "[dry-run] yarn --cwd \"$desktop\" linux:build"
+                echo "[dry-run] install the generated AppImage at \"$app\" and create \"$desktop_entry\""
+                return
+            fi
+
+            command -v yarn >/dev/null || { echo "Yarn is required to build Dotfiles Sync." >&2; return 1; }
+            yarn --cwd "$desktop" install --frozen-lockfile || return 1
+            yarn --cwd "$desktop" linux:install || return 1
+            yarn --cwd "$desktop" linux:build || return 1
+            local artifacts=("$build_dir/"*.AppImage)
+            if [[ ! -f "${artifacts[1]}" ]]; then
+                echo "The Linux build did not produce an AppImage in $build_dir." >&2
+                return 1
+            fi
+
+            mkdir -p "$HOME/Applications" "${desktop_entry:h}" || return 1
+            cp -p "${artifacts[1]}" "$app" || return 1
+            printf '[Desktop Entry]\nType=Application\nName=Dotfiles Sync\nComment=Synchronize dotfiles\nExec="%s"\nTerminal=false\nCategories=Utility;\n' "$app" > "$desktop_entry" || return 1
+            echo "Installed Dotfiles Sync to $app"
+            ;;
+        MINGW*|MSYS*|CYGWIN*|Windows_NT)
+            echo "Run .\\setup.ps1 from PowerShell to build and install Dotfiles Sync on Windows." >&2
+            return 1
+            ;;
+        *)
+            echo "Dotfiles Sync desktop builds are not supported on $os." >&2
+            return 1
+            ;;
+    esac
 }
 
 if (( INSTALL_SYNC_APP_ONLY )); then

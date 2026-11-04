@@ -1,0 +1,20 @@
+appId: com.ramseylourens.DotfilesSync
+productName: Dotfiles Sync
+directories:
+  output: dist
+files:
+  - main.js
+  - preload.js
+  - app/**/*
+  - package.json
+asar: true
+linux:
+  syncDesktopName: true
+  target:
+    - AppImage
+    - deb
+  category: Utility
+  maintainer: Ramsey Lourens
+win:
+  target:
+    - portable
