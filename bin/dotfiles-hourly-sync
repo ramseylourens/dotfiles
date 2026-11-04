@@ -1,0 +1,68 @@
+#!/usr/bin/env zsh
+
+set -e
+
+ROOT="${0:A:h:h}"
+cd "$ROOT"
+
+managed_files=(
+    config/Brewfile
+    config/composer.json
+    config/macports.txt
+    config/npm-global.json
+    config/vscode-extensions.txt
+)
+
+if [[ "$(git branch --show-current)" != "main" ]]; then
+    echo "Hourly sync only pushes from the main branch; refusing to run." >&2
+    exit 1
+fi
+
+if ! git remote get-url origin &>/dev/null; then
+    echo "Git remote 'origin' is not configured." >&2
+    exit 1
+fi
+
+if ! git diff --quiet -- "${managed_files[@]}" || ! git diff --cached --quiet -- "${managed_files[@]}"; then
+    echo "Managed files have local changes; refusing to overwrite or commit them." >&2
+    exit 1
+fi
+
+git fetch origin main
+if ! git merge-base --is-ancestor origin/main HEAD; then
+    echo "Local main has diverged from origin/main; refusing to push." >&2
+    exit 1
+fi
+
+ahead_commits=("${(@f)$(git rev-list origin/main..HEAD)}")
+for commit in "${ahead_commits[@]}"; do
+    [[ -z "$commit" ]] && continue
+    if [[ "$(git show -s --format=%s "$commit")" != "chore(dotfiles): hourly sync" ]]; then
+        echo "Local main contains an unpushed non-sync commit; refusing to push." >&2
+        exit 1
+    fi
+    changed_files=("${(@f)$(git diff-tree --no-commit-id --name-only -r "$commit")}")
+    if (( ${#changed_files} == 0 )); then
+        echo "An unpushed sync commit has no verifiable file changes; refusing to push." >&2
+        exit 1
+    fi
+    for changed_file in "${changed_files[@]}"; do
+        if [[ "$changed_file" != config/Brewfile && "$changed_file" != config/composer.json && "$changed_file" != config/macports.txt && "$changed_file" != config/npm-global.json && "$changed_file" != config/vscode-extensions.txt ]]; then
+            echo "An unpushed sync commit includes an unexpected file; refusing to push." >&2
+            exit 1
+        fi
+    done
+done
+
+zsh "$ROOT/bin/dotfiles-sync"
+
+git add -- "${managed_files[@]}"
+if ! git diff --cached --quiet -- "${managed_files[@]}"; then
+    git commit --only -m "chore(dotfiles): hourly sync" -- "${managed_files[@]}"
+fi
+
+if [[ -n "$(git rev-list origin/main..HEAD)" ]]; then
+    git push origin HEAD:main
+else
+    echo "Dotfiles inventories are unchanged; nothing to push."
+fi

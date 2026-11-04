@@ -3,7 +3,11 @@
 # DOTFILES_PM=brew|port forces a package manager, otherwise it is detected per machine.
 
 DRY_RUN=0
-[[ "$1" == "--dry-run" ]] && DRY_RUN=1
+INSTALL_SYNC_APP_ONLY=0
+for arg in "$@"; do
+    [[ "$arg" == "--dry-run" ]] && DRY_RUN=1
+    [[ "$arg" == "--install-sync-app" ]] && INSTALL_SYNC_APP_ONLY=1
+done
 
 # Runs a command, or only prints it with --dry-run
 run() {
@@ -113,6 +117,35 @@ install_with_macports() {
     echo -e "\033[33mCasks and Mac App Store apps are not in MacPorts, install them manually (see Readme)\033[0m"
 }
 
+install_dotfiles_sync_app() {
+    local project="${0:A:h}/apps/DotfilesSync/DotfilesSync.xcodeproj"
+    local derived="$TMPDIR/dotfiles-sync-derived"
+    local app="$derived/Build/Products/Release/DotfilesSync.app"
+
+    if (( DRY_RUN )); then
+        echo "[dry-run] xcodebuild -project \"$project\" -scheme DotfilesSync -configuration Release -derivedDataPath \"$derived\" CODE_SIGN_IDENTITY=- clean build"
+        echo "[dry-run] ditto \"$app\" \"$HOME/Applications/DotfilesSync.app\""
+        echo "[dry-run] open -a \"$HOME/Applications/DotfilesSync.app\""
+        return
+    fi
+
+    xcodebuild -project "$project" \
+        -scheme DotfilesSync \
+        -configuration Release \
+        -derivedDataPath "$derived" \
+        CODE_SIGN_IDENTITY=- \
+        clean build || return 1
+
+    mkdir -p "$HOME/Applications"
+    ditto "$app" "$HOME/Applications/DotfilesSync.app" || return 1
+    open -a "$HOME/Applications/DotfilesSync.app"
+}
+
+if (( INSTALL_SYNC_APP_ONLY )); then
+    install_dotfiles_sync_app || exit 1
+    exit 0
+fi
+
 echo -e "\033[33mChanging the default shell to /bin/zsh\033[0m"
 run chsh -s /bin/zsh
 
@@ -155,6 +188,9 @@ if [[ "$(uname)" == "Darwin" ]] && [[ -d "$HOME/Library/Mobile Documents/com~app
     else
         install_with_brew
     fi
+
+    echo -e "\033[33mBuilding and installing Dotfiles Sync in ~/Applications\033[0m"
+    install_dotfiles_sync_app || exit 1
 
     if (( DRY_RUN )); then
         echo -e "\033[33mDry run finished, stopping before the composer, npm and repository steps\033[0m"

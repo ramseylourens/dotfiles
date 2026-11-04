@@ -22,37 +22,7 @@ function dotfiles() {
     local pm="$DOTFILES_PM"
 
     if [[ "$1" == "sync" ]]; then
-        echo "sync mode ($pm)"
-        # parse the json and reinstall
-        (
-            cd ~/dotfiles/config
-
-            case "$pm" in
-                brew)
-                    echo "Backing up Homebrew"
-                    brew bundle dump --force
-                    ;;
-                port)
-                    echo "Backing up MacPorts"
-                    _dotfiles_port_dump
-                    code --list-extensions > ./vscode-extensions.txt
-                    ;;
-                *)
-                    echo "No supported package manager found, skipping system packages"
-                    ;;
-            esac
-        
-            echo "Backing up npm"
-            npm list -g --depth=0 --json > ./npm-global.json
-
-            echo "Backing up composer"
-            if [[ -f ~/.composer/composer.json && ! -L ~/.composer/composer.json && ~/.composer/composer.json -ot ~/dotfiles/config/composer.json ]]; then
-                cp ~/.composer/composer.json ./composer.json
-                rm ~/.composer/composer.json
-                ln -s ~/dotfiles/config/composer.json ~/.composer/composer.json
-            fi       
-    
-        )
+        zsh "$ZSH/bin/dotfiles-sync"
     elif [[ "$1" == "install" ]]; then
         echo "Installing global packages ($pm)"
         (
@@ -111,5 +81,4 @@ function dotfiles() {
         echo "List of commands"
     fi
 }
-
 

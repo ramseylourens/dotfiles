@@ -9,6 +9,11 @@ cd ~/Library/Mobile\ Documents/com~apple~CloudDocs/dotfiles/
 ```
 
 `./setup.sh --dry-run` prints what would be installed without changing anything.
+`./setup.sh --install-sync-app` builds and installs only the macOS Dotfiles Sync app.
+
+On macOS, `setup.sh` also builds and installs the Dotfiles Sync app in `~/Applications`. On first launch, the app registers an hourly background helper; approve it under **System Settings → General → Login Items → Allow in the Background** if macOS asks. The helper runs `dotfiles sync`, commits only managed package inventory files, and pushes to `origin main`. It skips empty syncs and refuses to push from a non-`main` branch, over local edits to managed files, or when `main` has diverged. Logs are written to `~/Library/Logs/DotfilesSync/sync.log`.
+
+Open `apps/DotfilesSync/DotfilesSync.xcodeproj` in Xcode to develop the macOS app and its helper.
 
 ## Supported machines
 
@@ -50,6 +55,7 @@ Slow and steady
     - [x] Per machine package manager detection (Homebrew / MacPorts)
     - [x] MacPorts package list and `dotfiles sync|install|upgrade` support
     - [x] `setup.sh --dry-run`
+    - [x] Added Dotfilessync app
 
 # Todo
 - Dotfiles function

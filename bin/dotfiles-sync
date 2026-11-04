@@ -1,0 +1,41 @@
+#!/usr/bin/env zsh
+
+set -e
+
+ROOT="${0:A:h:h}"
+source "$ROOT/helpers/platform.zsh"
+
+cd "$ROOT/config"
+
+case "$DOTFILES_PM" in
+    brew)
+        echo "Backing up Homebrew"
+        brew bundle dump --force --file="$ROOT/config/Brewfile"
+        ;;
+    port)
+        echo "Backing up MacPorts"
+        /opt/local/bin/port -q installed requested | awk '/\(active\)/ {
+            out = $1
+            n = split($2, v, "+")
+            for (i = 2; i <= n; i++) if (v[i] != "universal") out = out " +" v[i]
+            print out
+        }' > "$ROOT/config/macports.txt"
+        if command -v code &>/dev/null; then
+            code --list-extensions > "$ROOT/config/vscode-extensions.txt"
+        fi
+        ;;
+    *)
+        echo "No supported package manager found, skipping system packages" >&2
+        exit 1
+        ;;
+esac
+
+echo "Backing up npm"
+npm list -g --depth=0 --json > "$ROOT/config/npm-global.json"
+
+echo "Backing up composer"
+if [[ -f "$HOME/.composer/composer.json" && ! -L "$HOME/.composer/composer.json" && "$HOME/.composer/composer.json" -ot "$ROOT/config/composer.json" ]]; then
+    cp "$HOME/.composer/composer.json" "$ROOT/config/composer.json"
+    rm "$HOME/.composer/composer.json"
+    ln -s "$ROOT/config/composer.json" "$HOME/.composer/composer.json"
+fi

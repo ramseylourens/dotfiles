@@ -52,7 +52,7 @@ fi
 
 zsh-defer source "$ZSH/zsh/aliases.zsh"
 zsh-defer source "$ZSH/zsh/functions.zsh"
-zsh-defer source "$ZSH/zsh/dotfiles.zsh"
+source "$ZSH/zsh/dotfiles.zsh"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm

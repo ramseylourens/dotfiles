@@ -51,5 +51,6 @@ function mongodbservice() {
     fi
 }
 
-# SwimTechNL
-alias transipssh="ssh ramsey@149.210.177.254"
+# Docker Wordpress
+alias dwp="docker compose run --rm wp-cli"
+
