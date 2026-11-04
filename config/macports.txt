@@ -6,6 +6,7 @@ jq
 kotlin
 mailpit
 mkcert
+mysql8
 nginx +fancyindex +flv +http2 +mp4 +secure_link +ssl +stream
 nodejs22
 npm10
