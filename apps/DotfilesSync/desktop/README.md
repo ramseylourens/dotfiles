@@ -33,7 +33,7 @@ yarn linux:build
 
 The Linux package build produces an AppImage and a Debian package under `linux/dist/`.
 
-For Windows, run `.\setup.ps1` from the repository root to build the portable app and create a Start Menu shortcut. To build without installing:
+For Windows, use the following commands to build the portable app:
 
 ```powershell
 yarn install --frozen-lockfile

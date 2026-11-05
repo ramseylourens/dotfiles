@@ -17,7 +17,7 @@ The desktop app source is in [apps/DotfilesSync/desktop](./apps/DotfilesSync/des
 Build prerequisites:
 - macOS: Node.js 22+, Yarn 1.22+, Xcode, and CocoaPods.
 - Linux: Node.js 22+, Yarn 1.22+, and the native libraries required by Electron.
-- Windows: Node.js 22+, Yarn 1.22+, and PowerShell; run the build on Windows to produce the portable app and Start Menu shortcut.
+- Windows: Node.js 22+, Yarn 1.22+, and PowerShell; see the [desktop app README](./apps/DotfilesSync/desktop/README.md) for build instructions.
 
 Hourly background sync and its Git commit/push policy are not yet connected to this React Native desktop app.
 
