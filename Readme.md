@@ -12,8 +12,6 @@ cd ~/Library/Mobile\ Documents/com~apple~CloudDocs/dotfiles/
 
 `./setup.sh --dry-run` prints what would be installed without changing anything.
 `./setup.sh --install-sync-app` builds and installs the desktop app for macOS or Linux. 
-On Windows, run `.\setup.ps1` in PowerShell from the repository root.
-
 The desktop app source is in [apps/DotfilesSync/desktop](./apps/DotfilesSync/desktop). Mobile iOS and Android targets are not part of this desktop build. macOS uses the React Native macOS target; Linux and Windows use the Electron shell around the shared web UI. The app's Settings screen lets you switch between a regular Dock/taskbar window and a menu-bar/system-tray mode. The tray mode keeps the app running when its window is closed.
 
 Build prerequisites:

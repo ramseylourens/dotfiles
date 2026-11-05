@@ -19,7 +19,7 @@ run() {
 }
 
 if [[ "$(uname -s)" == MINGW* || "$(uname -s)" == MSYS* || "$(uname -s)" == CYGWIN* || "$(uname -s)" == "Windows_NT" ]]; then
-    echo "This script requires macOS or Linux. Run .\\setup.ps1 for Windows." >&2
+    echo "This script requires macOS or Linux." >&2
     exit 1
 fi
 
@@ -185,7 +185,7 @@ install_dotfiles_sync_app() {
             echo "Installed Dotfiles Sync to $app"
             ;;
         MINGW*|MSYS*|CYGWIN*|Windows_NT)
-            echo "Run .\\setup.ps1 from PowerShell to build and install Dotfiles Sync on Windows." >&2
+            echo "Build Dotfiles Sync for Windows from apps/DotfilesSync/desktop with yarn windows:build." >&2
             return 1
             ;;
         *)
