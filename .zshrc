@@ -66,3 +66,4 @@ if _java_home="$(mise where java 2>/dev/null)" && [ -n "$_java_home" ]; then
   export JAVA_HOME="$_java_home"
 fi
 unset _java_home
+alias sail='sh $([ -f sail ] && echo sail || echo vendor/bin/sail)'
